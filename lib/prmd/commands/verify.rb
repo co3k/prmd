@@ -5,9 +5,8 @@ module Prmd
     schema = Prmd::Schema.new(schema)
     if schema['properties']
       schema['properties'].each do |key, value|
-        key, schemata = schema.dereference(value)
+        id, schemata = schema.dereference(value)
 
-        id = "schemata/#{key}"
         errors << verify_schema(id, schemata)
         errors << verify_definitions_and_links(id, schemata)
       end
