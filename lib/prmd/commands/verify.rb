@@ -5,18 +5,18 @@ module Prmd
     schema = Prmd::Schema.new(schema)
     if schema['properties']
       schema['properties'].each do |key, value|
-        _, schemata = schema.dereference(value)
-        errors << verify_schema(schemata)
-        errors << verify_definitions_and_links(schemata)
+        key, schemata = schema.dereference(value)
+
+        id = "schemata/#{key}"
+        errors << verify_schema(id, schemata)
+        errors << verify_definitions_and_links(id, schemata)
       end
     end
     errors.flatten!
   end
 
-  def self.verify_schema(schema)
+  def self.verify_schema(id, schema)
     errors = []
-
-    id = schema['id']
 
     missing_requirements = []
     %w{$schema definitions description links properties title type}.each do |requirement|
@@ -31,10 +31,8 @@ module Prmd
     errors
   end
 
-  def self.verify_definitions_and_links(schema)
+  def self.verify_definitions_and_links(id, schema)
     errors = []
-
-    id = schema['id']
 
     if schema['definitions']
       unless schema['definitions'].has_key?('identity')
