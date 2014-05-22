@@ -1,7 +1,7 @@
 module Prmd
   def self.verify(schema)
     errors = []
-    errors << verify_schema(schema)
+    errors << verify_schema(schema['id'], schema)
     schema = Prmd::Schema.new(schema)
     if schema['properties']
       schema['properties'].each do |key, value|
